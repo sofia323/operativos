@@ -1,3 +1,4 @@
+// se hacen todos las funciones con la memria: reservarla, leerla, limpiarla, imprimir la y sus partes,buscar sus partes, almacenamiento y swich entre memorias
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
