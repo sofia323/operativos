@@ -71,7 +71,7 @@ void printTamDes(){
 	}
 	printf("\n");
 }
-void printPagiR()
+void fprintPagi()
 {
 	for (int i = 0; i < 16; ++i) 
 	{
@@ -79,7 +79,7 @@ void printPagiR()
 	}
 	printf("\n\n");
 }
-void printPagiV()
+void vprintPagi()
 {
 	for (int i = 0; i < 32; ++i)
 	{
@@ -90,7 +90,7 @@ void printPagiV()
 
 //...imprimir memoria...
 
-void printMemoriaR()
+void fprintMemoria()
 {
 	int *pun;
 	pun=posIniRam;
@@ -106,7 +106,7 @@ void printMemoriaR()
 	printf("\n\n");
 }
 
-void printMemoriaV()
+void vprintMemoria()
 {
 	int *pun;
 	pun=posIniVirtual;
@@ -124,7 +124,7 @@ void printMemoriaV()
 
 //...N° pag disponibles...
 
-int PaginasDisponiblesR()
+int fPaginasDisponibles()
 {
 	int cont=0;
 	for (int i = 0; i < 16; ++i)
@@ -137,7 +137,7 @@ int PaginasDisponiblesR()
 	return cont;
 }
 
-int PaginasDisponiblesV()
+int vPaginasDisponibles()
 {
 	int cont=0;
 	for (int i = 0; i < 32; ++i)
@@ -606,10 +606,6 @@ int main(){
 		tamDescriptor[0][i]=i+1;	
 	}
     //definir memorias
-	
-	//HELP
-	//HELP
-	
 	int *iniRam = (int *)calloc(32*2,2);
 	int *iniVirtual = (int *)calloc(64*2,2);
 
@@ -617,3 +613,169 @@ int main(){
 	posIniVirtual=iniVirtual;
 	posIniRam=iniRam;
 	
+	char a[256];
+		char * pun=a;
+		size_t t=256; 
+		//scanf("%s", &a);
+		getline(&pun,&t,stdin); //corta cuando no hay letras
+		int i;
+
+		//leer
+		i=0;
+		int leer = 1;
+		char lee[4] = "LEER"; 
+		while (leer && i < 4){
+			if (a[i]!=lee[i]){ //compara leer con el array de arriba
+				leer = 0;
+			}
+			i++;
+		}
+
+		//reservar
+		i=0;
+		int reservar = 1;
+		char reserva[8] = "RESERVAR";
+		while (reservar && i < 8){
+			if (a[i]!=reserva[i]){
+				reservar = 0;
+			}
+			i++;
+		}
+
+		//escribir
+		i=0;
+		int escribir = 1;
+		char escribi[8] = "ESCRIBIR";
+		while (escribir && i < 8){
+			if (a[i]!=escribi[i]){
+				escribir = 0;
+			}
+			i++;
+		}
+
+		//liberar
+		i=0;
+		int liberar = 1;
+		char libera[7] = "LIBERAR";
+		while (liberar && i < 7){
+			if (a[i]!=libera[i]){
+				liberar = 0;
+			}
+			i++;
+		}
+
+		//movervirtual
+		i=0;
+		int movervirtual = 1;
+		char movevirtual[12] = "MOVERVIRTUAL";
+		while (movervirtual && i < 12){
+			if (a[i]!=movevirtual[i]){
+				movervirtual = 0;
+			}
+			i++;
+		}
+
+		//moverfisica
+		i=0;
+		int moverfisica = 1;
+		char movefisica[11] = "MOVERFISICA";
+		while (moverfisica && i < 11){
+			if (a[i]!=movefisica[i]){
+				moverfisica = 0;
+			}
+			i++;
+		}
+	
+		if (reservar){
+			printf("Va a reservar ");
+			i=9;
+			while (a[i]!=')'){
+				aux[i-9]=a[i];
+				i++;
+			}
+			tamano = atoi(aux);
+			printf("%i de memoria\n", tamano);
+			printf("descriptor %i \n", fReservar(tamano,-1));
+
+		}else if(leer){
+			printf("Va a leer el descriptor: ");
+			i=5;
+			while (a[i]!=')'){
+				aux[i-5]=a[i];
+				i++;
+			}
+			mdescriptor = atoi(aux);
+			printf("%i\n", mdescriptor);
+			fLeer(mdescriptor);
+
+
+		}else if(escribir){
+			printf("Va a escribir: ");
+			i=9;
+			int asdf=0;
+			int sid = 1;
+			while (a[i]!=')'){
+				if (a[i] == ','){
+					mdescriptor = atoi(aux);
+					sid = 0;
+					i++;
+				}
+				if (sid){
+					aux[i-9]=a[i];
+				}else{
+					contenido[asdf] = a[i];
+					asdf++;
+				}
+
+				i++;
+			}
+			printf("%s en el descriptor %i\n", contenido, mdescriptor);
+			fAlmacenar(mdescriptor,contenido);
+		}else if(liberar){
+			printf("Va a liberar el descriptor: ");
+			i=8;
+			while (a[i]!=')'){
+				aux[i-8]=a[i];
+				i++;
+			}
+			mdescriptor = atoi(aux);
+			printf("%i\n", mdescriptor);
+			fLiberar(mdescriptor);
+		}else if(movervirtual){
+			printf("Va a mover virtual en el descriptor: ");
+			i=13;
+			while (a[i] != ')' ){
+				aux[i-13]=a[i];
+				i++;
+			}
+			mdescriptor = atoi(aux);
+			printf("%i\n", mdescriptor);
+			moverVirtual(mdescriptor);
+		}else if(moverfisica){
+			printf("Va a mover fisica en el descriptor: ");
+			i=12;
+			while (a[i]!=')'){
+				aux[i-12]=a[i];
+				i++;
+			}
+			mdescriptor = atoi(aux);
+			moverFisico(mdescriptor);
+			printf("%i\n", mdescriptor);
+		}else{
+			printf("Comando erroneo\n");
+		}
+	}else{
+			printf("Comando erroneo\n");
+		}
+		printf("\n\nMemoria\n");
+		fprintMemoria();
+		printf("\n\nPaginacion:\n");
+		fprintPagi();
+		printf("\n\nTamaños descriptores en paginas\n");
+		printTamDes();
+		printf("\n\nMemoria virtual:\n");
+		vprintMemoria();		
+		printf("\n\nPaginacion Virtual:\n");
+		vprintPagi();
+	}
+}
